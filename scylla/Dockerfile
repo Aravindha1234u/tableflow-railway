@@ -1,0 +1,2 @@
+FROM scylladb/scylla:latest
+EXPOSE 9042
