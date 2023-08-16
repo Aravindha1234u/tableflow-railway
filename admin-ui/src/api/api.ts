@@ -39,7 +39,7 @@ export function getAPIBaseURL(version?: string, api = "admin"): string {
     // If the host contains a port, remove it
     host = host.substring(0, host.indexOf(":"));
   }
-  return `${window.location.protocol}//${host}:3003/${api}${versionSlug}`;
+  return `${window.location.protocol}//${window.location.hostname}/backend/${api}${versionSlug}`;
 }
 
 export const getImporterURL = (): string => {
@@ -47,7 +47,7 @@ export const getImporterURL = (): string => {
   if (window.location.hostname === defaultAppHost) {
     return defaultImporterURL;
   }
-  return `${window.location.protocol}//${window.location.hostname}:3001`;
+  return `${window.location.protocol}//${window.location.hostname}/importer/`;
 };
 
 const successHandler = (notificationVars?: Notification) => {
