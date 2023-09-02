@@ -92,7 +92,7 @@ seed_provider:
           # In an existing cluster, specify the address of at least one existing node.
           # If you specify addresses of more than one node, use a comma to separate them.
           # For example: "<IP1>,<IP2>,<IP3>"
-          - seeds: "255.255.0.0"
+          - seeds: "127.0.0.1"
 
 # Address to bind to and tell other Scylla nodes to connect to.
 # You _must_ change this if you want multiple nodes to be able to communicate!
@@ -100,11 +100,11 @@ seed_provider:
 # If you leave broadcast_address (below) empty, then setting listen_address
 # to 0.0.0.0 is wrong as other nodes will not know how to reach this node.
 # If you set broadcast_address, then you can set listen_address to 0.0.0.0.
-listen_address: 0.0.0.0
+listen_address: localhost
 
 # Address to broadcast to other Scylla nodes
 # Leaving this blank will set it to the same value as listen_address
-broadcast_address: 255.255.0.0
+# broadcast_address: 1.2.3.4
 
 
 # When using multiple physical network interfaces, set this to true to listen on broadcast_address
@@ -260,7 +260,7 @@ batch_size_fail_threshold_in_kb: 1024
 # - com.scylladb.auth.TransitionalAuthorizer wraps around the CassandraAuthorizer, using it for
 #   authorizing permission management. Otherwise, it allows all. Use for upgrading
 #   clusters' auth.
-# authorizer: AllowAllAuthorizer
+authorizer: AllowAllAuthorizer
 
 # initial_token allows you to specify tokens manually.  While you can use # it with
 # vnodes (num_tokens > 1, above) -- in which case you should provide a 
@@ -272,7 +272,7 @@ batch_size_fail_threshold_in_kb: 1024
 # be set to 0.0.0.0. If left blank, this will be set to the value of
 # rpc_address. If rpc_address is set to 0.0.0.0, broadcast_rpc_address must
 # be set.
-broadcast_rpc_address: 255.255.0.0
+# broadcast_rpc_address: 1.2.3.4
 
 # Uncomment to enable experimental features
 # experimental_features:
@@ -503,7 +503,7 @@ listen_interface_prefer_ipv6: true
 # false: strict environment checks are in place; do not start if they are not met.
 # true: relaxed environment checks; performance and reliability may degraade.
 #
-# developer_mode: false
+developer_mode: false
 
 
 # Idle-time background processing

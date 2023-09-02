@@ -7,16 +7,16 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o build ./go/cmd
 
 FROM node:16-alpine AS admin-ui
 WORKDIR /admin-ui
-COPY package.json yarn.lock ./
+COPY ./admin-ui/package.json ./admin-ui/yarn.lock ./
 RUN yarn install
-COPY . .
+COPY ./admin-ui/. ./
 RUN yarn build
 
 FROM node:16-alpine AS importer-ui
 WORKDIR /importer-ui
-COPY package.json yarn.lock ./
+COPY ./importer-ui/package.json ./importer-ui/yarn.lock ./
 RUN yarn install
-COPY . .
+COPY ./importer-ui/. ./
 RUN yarn build
 
 FROM ubuntu:latest AS final
@@ -27,12 +27,13 @@ COPY --from=backend /backend/build /backend
 
 # Copy Admin-UI
 RUN mkdir -p /var/www/html/admin-ui
-COPY --from=admin-ui /admin-ui/build /var/www/html/admin-ui
+COPY --from=admin-ui /admin-ui/build /var/www/html/admin-ui/
 
 # Copy Importer-UI
 RUN mkdir -p /var/www/html/importer-ui
-COPY --from=importer-ui /importer-ui/build /var/www/html/importer-ui
+COPY --from=importer-ui /importer-ui/build /var/www/html/importer-ui/
 
+COPY ./nginx.conf /etc/nginx/sites-available/default
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 EXPOSE 80
