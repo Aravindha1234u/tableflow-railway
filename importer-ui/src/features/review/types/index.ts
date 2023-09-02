@@ -6,4 +6,6 @@ export type ReviewProps = {
   onSuccess: (uploadId: string) => void;
   onCancel: () => void;
   showImportLoadingStatus?: boolean;
+  skipHeaderRowSelection?: boolean;
+  schemaless?: boolean;
 };

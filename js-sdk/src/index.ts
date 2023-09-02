@@ -1,28 +1,29 @@
 import { TableFlowImporterProps } from "./types/index";
 import "./index.css";
-import cross from "./assets/cross";
+
+let postMessages: string[] = [];
 
 export default function createTableFlowImporter({
   elementId = "tableflow-importer",
-  isOpen = false,
   onRequestClose = () => null,
   importerId,
+  template,
   hostUrl,
   darkMode = false,
   primaryColor = "#7a5ef8",
   metadata = "{}",
   closeOnClickOutside,
   onComplete,
+  customStyles,
   className,
-  showImportLoadingStatus
+  showImportLoadingStatus,
+  skipHeaderRowSelection,
+  schemaless,
 }: TableFlowImporterProps) {
   // CSS classes
   const baseClass = "TableFlowImporter";
   const themeClass = darkMode && `${baseClass}-dark`;
-  const dialogClass = [`${baseClass}-dialog`, themeClass, className]
-    .filter((i) => i)
-    .join(" ");
-  const closeClass = `${baseClass}-close`;
+  const dialogClass = [`${baseClass}-dialog`, themeClass, className].filter((i) => i).join(" ");
 
   // dialog element
   let dialog = document.getElementById(elementId) as HTMLDialogElement;
@@ -41,60 +42,91 @@ export default function createTableFlowImporter({
   dialog.setAttribute("class", dialogClass);
 
   // iframe element
-  const urlParams = {
+  let urlParams = {
     importerId,
+    template: parseObjectOrStringJSON("template", template),
     darkMode: darkMode.toString(),
     primaryColor,
-    metadata,
-    isOpen: isOpen.toString(),
+    metadata: parseObjectOrStringJSON("metadata", metadata),
+    isOpen: "true",
     onComplete: onComplete ? "true" : "false",
+    customStyles: JSON.stringify(customStyles),
     showImportLoadingStatus: showImportLoadingStatus ? "true" : "false",
+    skipHeaderRowSelection: typeof skipHeaderRowSelection === "undefined" ? "" : skipHeaderRowSelection ? "true" : "false",
+    schemaless: typeof schemaless === "undefined" ? "" : schemaless ? "true" : "false",
   };
-  const searchParams = new URLSearchParams(urlParams);
-  const defaultImporterUrl = "https://importer.tableflow.com";
-  const uploaderUrl = `${
-    hostUrl ? hostUrl : defaultImporterUrl
-  }?${searchParams}`;
 
-  try {
-    JSON.parse(metadata);
-  } catch (e) {
-    console.error(
-      'The "metadata" prop is not a valid JSON string. Please check the documentation for more details.'
-    );
-  }
+  const uploaderUrl = getUploaderUrl(urlParams, hostUrl);
 
   function messageListener(e: any) {
-    if (!e || !e.data) {
-      return;
-    }
+    if (!e || !e?.data) return;
+
     const messageData = e.data;
-    if (messageData?.source !== "tableflow-importer") {
+
+    if (
+      messageData?.source !== "tableflow-importer" ||
+      messageData?.importerId !== importerId ||
+      !messageData?.id ||
+      postMessages.includes(messageData.id)
+    ) {
       return;
     }
-    if (messageData?.importerId !== importerId) {
-      return;
+
+    if (messageData?.type === "start" && urlParams.isOpen !== "true") {
+      urlParams = { ...urlParams, isOpen: "true" };
+      const uploaderUrl = getUploaderUrl(urlParams, hostUrl);
+      dialog.innerHTML = `<iframe src="${uploaderUrl}" />`;
     }
+
     if (messageData?.type === "complete" && onComplete) {
       onComplete({
         data: messageData?.data || null,
         error: messageData?.error || null,
       });
+      postMessages.push(messageData?.id);
     }
+
     if (messageData?.type === "close" && onRequestClose) {
       onRequestClose();
+      postMessages.push(messageData?.id);
+
+      if (urlParams.isOpen !== "false") {
+        urlParams = { ...urlParams, isOpen: "false" };
+        const uploaderUrl = getUploaderUrl(urlParams, hostUrl);
+        dialog.innerHTML = `<iframe src="${uploaderUrl}" />`;
+      }
     }
   }
+
   window.addEventListener("message", messageListener);
 
   dialog.innerHTML = `<iframe src="${uploaderUrl}" />`;
 
-  // close button
-  const close = document.createElement("button");
-  close.setAttribute("class", closeClass);
-  close.addEventListener("click", () => onRequestClose());
-  close.innerHTML = `<span>${cross}</span>`;
-  dialog.appendChild(close);
-
   return dialog;
 }
+
+function getUploaderUrl(urlParams: any, hostUrl?: string) {
+  const searchParams = new URLSearchParams(urlParams);
+  const defaultImporterUrl = "https://importer.tableflow.com";
+  return `${hostUrl ? hostUrl : defaultImporterUrl}?${searchParams}`;
+}
+
+// Allows for the user to pass in JSON as either an object or a string
+const parseObjectOrStringJSON = (name: string, param?: Record<string, unknown> | string): string => {
+  if (typeof param === "undefined") {
+    return "";
+  }
+  if (typeof param === "string") {
+    try {
+      const obj = JSON.parse(param);
+      return JSON.stringify(obj);
+    } catch (e) {
+      console.error(
+        `The '${name}' prop is not a valid JSON string. This prop can either be a JSON string or JSON object. Please check the documentation for more details.`
+      );
+    }
+  } else {
+    return JSON.stringify(param);
+  }
+  return "";
+};

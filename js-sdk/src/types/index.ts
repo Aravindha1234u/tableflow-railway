@@ -1,13 +1,18 @@
+import { CSSProperties } from "react";
+
 export type TableFlowImporterProps = HTMLDialogElement & {
   elementId?: string;
-  isOpen?: boolean;
   onRequestClose?: () => void;
   importerId: string;
+  template?: Record<string, unknown> | string;
   hostUrl?: string;
   darkMode?: boolean;
   primaryColor?: string;
   closeOnClickOutside?: boolean;
-  metadata?: string;
+  metadata?: Record<string, unknown> | string;
   onComplete?: (data: { data: any; error: any }) => void;
+  customStyles?: Record<string, string> | CSSProperties;
   showImportLoadingStatus?: boolean;
+  skipHeaderRowSelection?: boolean;
+  schemaless?: boolean;
 };

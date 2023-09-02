@@ -5,8 +5,8 @@ import useReviewTable from "./hooks/useReviewTable";
 import { ReviewProps } from "./types";
 import style from "./style/Review.module.scss";
 
-export default function Review({ upload, template, onSuccess, onCancel }: ReviewProps) {
-  const { rows, formValues } = useReviewTable(upload?.upload_columns, template?.template_columns);
+export default function Review({ upload, template, onSuccess, onCancel, skipHeaderRowSelection, schemaless }: ReviewProps) {
+  const { rows, formValues } = useReviewTable(upload?.upload_columns, template?.columns, schemaless);
 
   const { mutate, error, isSuccess, isLoading } = usePostUpload(upload?.id || "");
 
@@ -34,7 +34,7 @@ export default function Review({ upload, template, onSuccess, onCancel }: Review
       <form onSubmit={onSubmit}>
         {upload ? (
           <div className={style.tableWrapper}>
-            <Table data={rows} background="dark" columnWidths={["20%", "30%", "30%", "20%"]} columnAlignments={["", "", "", "center"]} fixHeader />
+            <Table data={rows} background="dark" columnWidths={["20%", "30%", "30%", "20%"]} columnAlignments={["", "", "", "center"]} />
           </div>
         ) : (
           <>Loading...</>
@@ -42,14 +42,18 @@ export default function Review({ upload, template, onSuccess, onCancel }: Review
 
         <div className={style.actions}>
           <Button type="button" variants={["secondary"]} onClick={onCancel}>
-            Cancel
+            {skipHeaderRowSelection ? "Cancel" : "Back"}
           </Button>
           <Button variants={["primary"]} disabled={isLoading}>
             Submit
           </Button>
         </div>
 
-        {!isLoading && !!error && <Errors error={error} />}
+        {!isLoading && !!error && (
+          <div className={style.errorContainer}>
+            <Errors error={error} />
+          </div>
+        )}
 
         {isSuccess && <p>Success!</p>}
       </form>
