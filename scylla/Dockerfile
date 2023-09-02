@@ -1,4 +1,4 @@
-FROM scylladb/scylla:latest
+FROM scylladb/scylla:5.1.4
 # COPY scylla.yaml /etc/scylla/scylla.yaml 
 
 ARG SEEDS
