@@ -48,6 +48,7 @@ type ServerConfig struct {
 	ImportCompleteHandler          func(*model.Import)
 	AdditionalCORSOrigins          []string
 	AdditionalCORSHeaders          []string
+	AdditionalImporterRoutes       func(group *gin.RouterGroup)
 	AdditionalAdminRoutes          func(group *gin.RouterGroup)
 	UseZapLogger                   bool
 }
@@ -126,11 +127,18 @@ func StartWebServer(config ServerConfig) *http.Server {
 	importer.HEAD("/files/:id", tusHeadFile(tusHandler))
 	importer.PATCH("/files/:id", tusPatchFile(tusHandler))
 
-	importer.POST("/importer/:id", getImporterForImportService)
-	importer.GET("/upload/:id", getUploadForImportService)
-	importer.POST("/upload/:id/set-header-row", setUploadHeaderRowForImportService)
-	importer.POST("/upload/:id/set-column-mapping", func(c *gin.Context) { setUploadColumnMappingAndImportData(c, config.ImportCompleteHandler) })
-	importer.GET("/import/:id", getImportForImportService)
+	importer.POST("/importer/:id", importerGetImporter)
+	importer.GET("/upload/:id", importerGetUpload)
+	importer.POST("/upload/:id/set-header-row", importerSetHeaderRow)
+	importer.POST("/upload/:id/set-column-mapping", func(c *gin.Context) { importerSetColumnMappingAndImport(c, config.ImportCompleteHandler) })
+	importer.GET("/import/:id/review", importerReviewImport)
+	importer.GET("/import/:id/rows", importerGetImportRows)
+	importer.GET("/import/:id", importerGetImport)
+
+	/* Additional Routes */
+	if config.AdditionalImporterRoutes != nil {
+		config.AdditionalImporterRoutes(importer)
+	}
 
 	/* ---------------------------  Admin routes  ---------------------------- */
 
