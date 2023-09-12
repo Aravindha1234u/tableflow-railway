@@ -16,4 +16,4 @@ ENV API_ADDR=$API_ADDR
 ENV LISTEN_ADDR=$LISTEN_ADDR
 
 EXPOSE 9042
-ENTRYPOINT /docker-entrypoint.py --smp "${SMP:-2}" --memory "${MEM:-2G}" --overprovisioned "${OVERPROV:-1}" --api-address "${API_ADDR:-::}" --listen-address "${LISTEN_ADDR:-::}" --rpc-address "${LISTEN_ADDR:-::}" --alternator-address "${LISTEN_ADDR:-::}"
+ENTRYPOINT /docker-entrypoint.py --authorizer=AllowAllAuthorizer --smp "${SMP:-2}" --memory "${MEM:-2G}" --overprovisioned "${OVERPROV:-1}" --api-address "${API_ADDR:-::}" --listen-address "${LISTEN_ADDR:-::}" --rpc-address "${LISTEN_ADDR:-::}" --alternator-address "${LISTEN_ADDR:-::}"
