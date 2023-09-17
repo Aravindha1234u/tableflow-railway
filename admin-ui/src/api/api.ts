@@ -47,7 +47,7 @@ export const getImporterURL = (): string => {
   if (window.location.hostname === defaultAppHost) {
     return defaultImporterURL;
   }
-  return `${window.location.protocol}//${window.location.hostname}/importer/`;
+  return `${window.location.protocol}//${window.location.hostname}/importer-ui/`;
 };
 
 const successHandler = (notificationVars?: Notification) => {

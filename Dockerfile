@@ -26,11 +26,11 @@ RUN mkdir -p /backend
 COPY --from=backend /backend/build /backend 
 
 # Copy Admin-UI
-RUN mkdir -p /var/www/html/admin-ui
-COPY --from=admin-ui /admin-ui/build /var/www/html/admin-ui/
+COPY --from=admin-ui /admin-ui/build /var/www/html/
 
 # Copy Importer-UI
 RUN mkdir -p /var/www/html/importer-ui
+COPY --from=importer-ui /importer-ui/build/static /var/www/html/static
 COPY --from=importer-ui /importer-ui/build /var/www/html/importer-ui/
 
 COPY ./nginx.conf /etc/nginx/sites-available/default

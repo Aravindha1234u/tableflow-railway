@@ -32,7 +32,7 @@ TableFlow offers a wide range of features to help you manage and work with your 
 - Click the Railway button 👆
 - Add the required environment variables. 
 - Deploy
-- Check the Known Issues section below. You can delete the Scylla DB service since it doesn't work right now.
+- Once scylla DB is deployed and running, you should get TCP proxy URL in settings -> public networking. Copy the URL and update the backend service environment variables and make sure to redeploy the service to make it work as expected.
 - Access the Admin UI by navigating to "http://\<PROJECT_URL\>.up.railway.dev/". 
 ![Dashboard](img/admin-dashboard.png)
 - You can create a new importer by clicking on the "Create New" button on the top right corner.
@@ -47,10 +47,6 @@ TableFlow offers a wide range of features to help you manage and work with your 
 ![code](img/code_block.png)
 - Tableflow importer gives option to import CSV data but right now that feature is not working on Railway. We are working on a fix for this. Check the Known Issues section below.
 - Enjoy 🎉
-
-## ⚙️ Known Issues
-- Scylla DB doesn't work on Railway and we are figuring out a process to get it working. For now, you can deploy scylla on a different server and use it with Tableflow.
-- The importers are not working on Railway. We are working on a fix for this. Since the code support only port 80, we are trying to figure out a way to get it working through reverse proxy with path forwarding.
 
 ## 📝 Notes
 
