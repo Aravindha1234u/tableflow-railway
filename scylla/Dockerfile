@@ -1,19 +1,5 @@
 FROM scylladb/scylla:5.1.4
 # COPY scylla.yaml /etc/scylla/scylla.yaml 
 
-ARG SEEDS
-ARG SMP
-ARG MEM
-ARG OVERPROV
-ARG API_ADDR
-ARG LISTEN_ADDR
-
-ENV SEEDS=$SEEDS
-ENV SMP=$SMP
-ENV MEM=$MEM
-ENV OVERPROV=$OVERPROV
-ENV API_ADDR=$API_ADDR
-ENV LISTEN_ADDR=$LISTEN_ADDR
-
 EXPOSE 9042
-ENTRYPOINT /docker-entrypoint.py --authorizer=AllowAllAuthorizer --smp "${SMP:-2}" --memory "${MEM:-2G}" --overprovisioned "${OVERPROV:-1}" --api-address "${API_ADDR:-::}" --listen-address "${LISTEN_ADDR:-::}" --rpc-address "${LISTEN_ADDR:-::}" --alternator-address "${LISTEN_ADDR:-::}"
+ENTRYPOINT /docker-entrypoint.py --authorizer=AllowAllAuthorizer --smp "2" --memory "2G" --overprovisioned "1" --api-address "127.0.0.1" --listen-address "0.0.0.0" --rpc-address "0.0.0.0" --broadcast-rpc-address "255.255.255.0" --alternator-address "0.0.0.0"
