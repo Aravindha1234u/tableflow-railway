@@ -31,8 +31,8 @@ TableFlow offers a wide range of features to help you manage and work with your 
 
 - Click the Railway button 👆
 - Add the required environment variables. 
-- Deploy
-- Once scylla DB is deployed and running, you should get TCP proxy URL in settings -> public networking. Copy the URL and update the backend service environment variables and make sure to redeploy the service to make it work as expected.
+- Deploy.
+- Deployment will take some time. Once scylla DB is deployed and running, you should get TCP proxy URL in settings -> public networking. Copy the URL and update the backend service environment variables and make sure to redeploy the service to make it work as expected.
 - Access the Admin UI by navigating to "http://\<PROJECT_URL\>.up.railway.dev/". 
 ![Dashboard](img/admin-dashboard.png)
 - You can create a new importer by clicking on the "Create New" button on the top right corner.
@@ -47,12 +47,14 @@ TableFlow offers a wide range of features to help you manage and work with your 
 ![code](img/code_block.png)
 - Tableflow importer gives feature to import data from CSV with example CSV file which you can download. if you want to preview the importer you can click on `preview` button.
 ![preview](img/importer-ui.png)
+- Once you import the CSV file you can choose the header column and preview the data.
+![importer-header](img/importer-header.png)
+- After previewing the data you can import the data into the tableflow.
+![complete](img/impoter-complete.png)
+- You can view the imported data on data tab.
+![data](img/data.png)
 - There are more features of managing data in tableflow which you can explore by yourself.
 - Enjoy 🎉
-
-## ⚙️ Known Issues
-- The importer-ui is not fully working on Railway. We are trying to fix this issue as soon as possible if tableflow team doesn't fix it.
-
 ## 📝 Notes
 
 - Source repo: https://github.com/tableflowhq/tableflow
