@@ -45,8 +45,13 @@ TableFlow offers a wide range of features to help you manage and work with your 
 ![edit](img/edit_column.png)
 - Table flow also giving example code block which you can add into your website to use the importer.
 ![code](img/code_block.png)
-- Tableflow importer gives option to import CSV data but right now that feature is not working on Railway. We are working on a fix for this. Check the Known Issues section below.
+- Tableflow importer gives feature to import data from CSV with example CSV file which you can download. if you want to preview the importer you can click on `preview` button.
+![preview](img/importer-ui.png)
+- There are more features of managing data in tableflow which you can explore by yourself.
 - Enjoy 🎉
+
+## ⚙️ Known Issues
+- The importer-ui is not fully working on Railway. We are trying to fix this issue as soon as possible if tableflow team doesn't fix it.
 
 ## 📝 Notes
 
