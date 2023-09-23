@@ -32,8 +32,8 @@ TableFlow offers a wide range of features to help you manage and work with your 
 - Click the Railway button 👆
 - Add the required environment variables. 
 - Deploy.
-- Deployment will take some time. Once scylla DB is deployed and running, you should get TCP proxy URL in settings -> public networking. Copy the URL and update the backend service environment variables and make sure to redeploy the service to make it work as expected.
-- Access the Admin UI by navigating to "http://\<PROJECT_URL\>.up.railway.dev/". 
+- Deployment will take some time. Once scylla DB is deployed and running backend service should start.
+- Access the Admin UI by clicking on Railway's public URL. 
 ![Dashboard](img/admin-dashboard.png)
 - You can create a new importer by clicking on the "Create New" button on the top right corner.
 ![importer](img/new_importer.png)
